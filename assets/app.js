@@ -38,6 +38,13 @@ $(document).ready(function() {
             gifDiv.append(animalGif);
             $("#animal-view").prepend(gifDiv);
         }
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+          } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+          }
 
 
       })
