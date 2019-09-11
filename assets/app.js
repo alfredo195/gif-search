@@ -29,7 +29,17 @@ $(document).ready(function() {
           url: queryURL,
           method: "GET"  
       }).then(function(response){
-          
+        var results = response.data
+
+        for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class = 'animal'>");
+            var animalGif = $("<img>")
+            animalGif.attr("src",results[i].images.fixed_height.url);
+            gifDiv.append(animalGif);
+            $("#animal-view").prepend(gifDiv);
+        }
+
+
       })
         
     }
