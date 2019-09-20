@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>animal gif search</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+  <meta charset="UTF-8">
+  <title>Gif Search</title>
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
 </head>
+
 <body>
-    <div class = "container">
-        <h1>animal gif search </h1>
 
-        <div id="display-buttons"></div>
+  <div id="animal-buttons">
 
+  </div>
 
-        <form id= "animal-form">
-            <label for="animal-input"> Search for animals :)</label>
-            <input type="text" id = "animal-input"><br>
-            <input id="find-animal" type="submit" value="animal gif search"> 
-        </form>
+  <form id="animal-form">
+    <label for="animal-input">Add an animal</label>
+    <input type="text" id="animal-input"><br>
+    <input id="add-animal" type="submit" value="Submit">
+  </form>
 
-        <div id="animal-view"></div>
+  <div id="animals">
 
-    </div>
-    <script
- src="https://code.jquery.com/jquery-3.4.1.min.js"
- integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
- crossorigin="anonymous"></script>
-    <script src="assets/app.js"></script>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="assets/app.js"></script>
+  
 </body>
 </html>
-

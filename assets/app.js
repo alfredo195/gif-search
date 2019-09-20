@@ -1,99 +1,91 @@
 $(document).ready(function() {
-  var animalList = [
-    "hippopotamus",
-    "koala",
-    "pig",
-    "puma",
-    "snake",
-    "dog",
-    "cat",
-    "alpaca",
-    "frog",
-    "cow",
-    "donkey",
-    "armadillo",
-    "seal",
-    "gorilla"
+
+  var animals = [
+    "dog", "cat", "rabbit", "hamster", "skunk", "goldfish",
+    "bird", "ferret", "turtle", "sugar glider", "chinchilla",
+    "hedgehog", "hermit crab", "gerbil", "pygmy goat", "chicken",
+    "capybara", "teacup pig", "serval", "salamander", "frog"
   ];
 
-  function displayImg() {
-    $("#animal-view").empty();
-    var input = $(this).attr("data-name");
-    var limit = 10;
-    var queryURL =
-      "https://api.giphy.com/v1/gifs/search?q=" +
-      input +
-      "&limit=" +
-      limit +
-      "&api_key=qhZP9JnDanZ5O7LQzXiFYgX18hKKgdFX&limit=10";
+  // function to make buttons and add to page
+  function populateButtons(arrayToUse, classToAdd, areaToAddTo) {
+    $(areaToAddTo).empty();
+
+    for (var i = 0; i < arrayToUse.length; i++) {
+      var a = $("<button>");
+      a.addClass(classToAdd);
+      a.attr("data-type", arrayToUse[i]);
+      a.text(arrayToUse[i]);
+      $(areaToAddTo).append(a);
+    }
+
+  }
+
+  $(document).on("click", ".animal-button", function() {
+    $("#animals").empty();
+    $(".animal-button").removeClass("active");
+    $(this).addClass("active");
+
+    var type = $(this).attr("data-type");
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + type + "&api_key=tlT9iCHYtsyF8SnKJPCWIVgBB8baapw5&limit=10";
 
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).done(function(response) {
-      for (var i = 0; i < limit; i++) {
-        var displayDiv = $("<div>");
-        displayDiv.addClass("holder");
+    })
+      .then(function(response) {
+        var results = response.data;
 
-        var image = $("<img>");
-        image.attr("src", response.data[i].images.original_still.url);
-        image.attr("data-still", response.data[i].images.original_still.url);
-        image.attr("data-animate", response.data[i].images.original.url);
-        image.attr("data-state", "still");
-        image.attr("class", "gif");
-        displayDiv.append(image);
+        for (var i = 0; i < results.length; i++) {
+          var animalDiv = $("<div class=\"animal-item\">");
 
-        var rating = response.data[i].rating;
-        console.log(response);
-        var pRating = $("<p>").text("Rating: " + rating);
-        displayDiv.append(pRating);
+          var rating = results[i].rating;
 
-        $("#animal-view").append(displayDiv);
-      }
-    });
-  }
+          var p = $("<p>").text("Rating: " + rating);
 
-  function renderButtons() {
-    $("#display-buttons").empty();
+          var animated = results[i].images.fixed_height.url;
+          var still = results[i].images.fixed_height_still.url;
 
-    for (var i = 0; i < animalList.length; i++) {
-      var newButton = $("<button>");
-      newButton.attr("class", "btn btn-default");
-      newButton.attr("id", "input");
-      newButton.attr("data-name", animalList[i]);
-      newButton.text(animalList[i]);
-      $("#display-buttons").append(newButton);
-    }
-  }
+          var animalImage = $("<img>");
+          animalImage.attr("src", still);
+          animalImage.attr("data-still", still);
+          animalImage.attr("data-animate", animated);
+          animalImage.attr("data-state", "still");
+          animalImage.addClass("animal-image");
 
-  function imageChangeState() {
-    var state = $(this).attr("data-state");
-    var animateImage = $(this).attr("data-animate");
-    var stillImage = $(this).attr("data-still");
+          animalDiv.append(p);
+          animalDiv.append(animalImage);
 
-    if (state == "still") {
-      $(this).attr("src", animateImage);
-      $(this).attr("data-state", "animate");
-    } else if (state == "animate") {
-      $(this).attr("src", stillImage);
-      $(this).attr("data-state", "still");
-    }
-  }
-
-  $("#submitPress").on("click", function() {
-    var input = $("#user-input")
-      .val()
-      .trim();
-    form.reset();
-    animalList.push(input);
-
-    renderButtons();
-
-    return false;
+          $("#animals").append(animalDiv);
+        }
+      });
   });
 
-  renderButtons();
+  $(document).on("click", ".animal-image", function() {
 
-  $(document).on("click", "#input", displayImg);
-  $(document).on("click", ".gif", imageChangeState);
+    var state = $(this).attr("data-state");
+
+    if (state === "still") {
+      $(this).attr("src", $(this).attr("data-animate"));
+      $(this).attr("data-state", "animate");
+    }
+    else {
+      $(this).attr("src", $(this).attr("data-still"));
+      $(this).attr("data-state", "still");
+    }
+  });
+
+  $("#add-animal").on("click", function(event) {
+    event.preventDefault();
+    var newAnimal = $("input").eq(0).val();
+
+    if (newAnimal.length > 2) {
+      animals.push(newAnimal);
+    }
+
+    populateButtons(animals, "animal-button", "#animal-buttons");
+
+  });
+
+  populateButtons(animals, "animal-button", "#animal-buttons");
 });
